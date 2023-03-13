@@ -1,25 +1,24 @@
 /* eslint-disable no-unused-vars */
 import { useEffect } from 'react';
-import { createPortal } from 'react-dom';
+// import { createPortal } from 'react-dom';
 import { StyledOverlay, StyledModal } from './Modal.styled';
 // import PropTypes from 'prop-types';
 
-const modalRoot = document.querySelector('#modal-root');
+// const modalRoot = document.querySelector('#modal-root');
 
-export const Modal = ({ onClose, children }) => {
+export const Modal = ({largeImageURL, tags, onClose}) => {
   useEffect(() => {
-      const hadleKeyDown = e => {
-    if (e.code === 'Escape') {
-      onClose();
-    }
-  };
+
     window.addEventListener('keydown', hadleKeyDown);
     return () => {
       window.removeEventListener('keydown', hadleKeyDown);
     };
-  }, [onClose]);
-
-
+  });
+        const hadleKeyDown = e => {
+    if (e.code === 'Escape') {
+      onClose();
+    }
+  };
 
   const handleBackdropClick = e => {
     if (e.currentTarget === e.target) {
@@ -27,11 +26,10 @@ export const Modal = ({ onClose, children }) => {
     }
   };
 
-  return createPortal(
+  return (
     <StyledOverlay onClick={handleBackdropClick}>
-      <StyledModal>{children}</StyledModal>
-    </StyledOverlay>,
-    modalRoot
+      <StyledModal><img src={largeImageURL} alt={tags} /></StyledModal>
+    </StyledOverlay>
   );
 };
 // export class Modal extends Component {
