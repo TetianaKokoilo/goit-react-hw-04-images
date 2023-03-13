@@ -1,27 +1,43 @@
+import { useState } from 'react';
+import { Modal } from 'components/Modal/Modal';
 import {
   StyledImageGalleryItem,
   StyledGalleryImage,
 } from './ImageGalleryItem.styled';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
-export const ImageGalleryItem = ({ image, tags, onClick, index, getIndex }) => {
+export const ImageGalleryItem = ({
+  tags,
+  largeImageURL,
+  webformatURL,
+}) => {
+  const [showModal, setShowModal] = useState(false);
+
+    const toggleModal = () => {
+    setShowModal(!showModal);
+  };
+
   return (
-    <StyledImageGalleryItem onClick={onClick}>
+    <>
+    <StyledImageGalleryItem onClick={toggleModal}>
       <StyledGalleryImage
-        onClick={() => {
-          getIndex(index);
-        }}
-        src={image}
+        src={webformatURL}
         alt={tags}
       />
     </StyledImageGalleryItem>
+          {showModal && (
+        <Modal largeImageURL={largeImageURL} tags={tags} onClose={toggleModal} />
+
+        
+      )}
+      </>
   );
 };
 
 
-ImageGalleryItem.propTypes = {
-  image: PropTypes.string.isRequired,
-  tags: PropTypes.string.isRequired,
-  index: PropTypes.number.isRequired,
-  onClick: PropTypes.func.isRequired,
-};
+// ImageGalleryItem.propTypes = {
+//   image: PropTypes.string.isRequired,
+//   tags: PropTypes.string.isRequired,
+//   index: PropTypes.number.isRequired,
+//   onClick: PropTypes.func.isRequired,
+// };

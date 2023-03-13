@@ -1,7 +1,7 @@
 import { StyledButtonLoadMore } from './Button.styled';
 
-export const Button = ({ onLoadMore }) => (
-  <StyledButtonLoadMore type="button" onClick={onLoadMore}>
+export const Button = ({ clickBtn }) => (
+  <StyledButtonLoadMore type="button" onClick={clickBtn}>
     Load More
   </StyledButtonLoadMore>
 );

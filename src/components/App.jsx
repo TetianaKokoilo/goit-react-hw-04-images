@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
-import { ImageGalleryItem } from './ImageGalleryItem/ImageGalleryItem';
-import { Modal } from 'components/Modal/Modal';
 import { Loader } from './Loader/Loader';
 import { Button } from './Button/Button';
 import PixabeyAPI from './images-api';
@@ -14,8 +12,7 @@ export const App = () => {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [images, setImages] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [index, setIndex] = useState(null);
+  const [showBtn, setShowBtn] = useState(false);
 
   useEffect(() => {
     if (!name) {
@@ -23,63 +20,52 @@ export const App = () => {
     }
     setLoading(true);
     PixabeyAPI.fetchImages(name, page)
-      .then(images => {
-        if (page === 1) {
-          setImages([...images.hits]);
-          return;
-        }
-        setImages(prevState => [...prevState, ...images.hits]);
+      .then(({ hits, totalHits }) => {
+        setImages(prevState => [...prevState, ...hits]);
+        setShowBtn(page < Math.ceil(totalHits / 12));
       })
-      .catch(error => setError(error))
+      .catch(error => setError(error.message))
       .finally(
-        () => setLoading(false),
-        setPage(prevState => prevState.page + 1)
+        setTimeout(() => {
+          setLoading(false);
+        }, 500)
       );
   }, [name, page]);
 
-  const getSearchSubmit = name => {
-    setName(name);
+  const getSearchSubmit = value => {
+    if (value === name) return;
+
+    setName(value);
+    setImages([]);
+    setShowBtn(false);
     setPage(1);
   };
-    const getIndex = index => {
-    setIndex(index);
-  };
 
-  const toggleModal = () => {
-    setShowModal(showModal => !showModal);
+  const clickBtn = () => {
+    setPage(prevState => prevState + 1);
   };
+  if (isLoading) {
+    return (
+      <div>
+        <Searchbar onSubmit={getSearchSubmit} />
+        <Loader />
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <Searchbar onSubmit={getSearchSubmit} />
+        {error && <div>{error}</div>}
+        {isLoading && <Loader />}
+        <ImageGallery images={images} />
 
-  return (
-    <div>
-      <Searchbar onSubmit={getSearchSubmit} />
-      {error && <div>{error.message}</div>}
-      {isLoading && <Loader />}
-      <ImageGallery>
-        {images.map((image, index) => {
-          return (
-            <ImageGalleryItem
-              onClick={toggleModal}
-              getIndex={getIndex}
-              key={image.id}
-              // index={index}
-              image={image.webformatURL}
-              tags={image.tags}
-            />
-          );
-        })}
-      </ImageGallery>
-      {showModal && (
-        <Modal onClose={toggleModal}>
-          <img src={images[index].largeImageURL} alt={images[index].tags} />
-        </Modal>
-      )}
-      {images.length >= 12 && (
-        <Button onLoadMore={() => {
-          setPage(prevState => prevState + 1);
-        }} />
-      )}
-    </div>
-  );
+        {showBtn && <Button clickBtn={clickBtn} />}
+      </div>
+    );
+  }
+  // return (
+
+  // );
 };
 // export class App extends Component {
 //   state = {
