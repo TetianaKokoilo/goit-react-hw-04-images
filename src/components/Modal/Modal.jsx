@@ -8,15 +8,27 @@ const modalRoot = document.querySelector('#modal-root');
 
 export const Modal = ({ onClose, children }) => {
   useEffect(() => {
-    const hadleKeyDown = e => {
-      if (e.code === 'Escape') {
-        onClose();
-      }
+      const hadleKeyDown = e => {
+    if (e.code === 'Escape') {
+      onClose();
     }
-  }, [onClose])
+  };
+    window.addEventListener('keydown', hadleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', hadleKeyDown);
+    };
+  }, [onClose]);
+
+
+
+  const handleBackdropClick = e => {
+    if (e.currentTarget === e.target) {
+      onClose();
+    }
+  };
 
   return createPortal(
-    <StyledOverlay onClick={this.handleBackdropClick}>
+    <StyledOverlay onClick={handleBackdropClick}>
       <StyledModal>{children}</StyledModal>
     </StyledOverlay>,
     modalRoot
