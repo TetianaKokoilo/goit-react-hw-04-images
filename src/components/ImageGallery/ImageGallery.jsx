@@ -3,7 +3,7 @@ import { ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem';
 import PropTypes from 'prop-types';
 
 export const ImageGallery = ({ images }) => {
-  console.log(images)
+  // console.log(images)
   return (
     <StyledImageGallery>
       {images.map(({ id, tags, largeImageURL, webformatURL }) => {

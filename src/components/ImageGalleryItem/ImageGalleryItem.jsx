@@ -4,40 +4,32 @@ import {
   StyledImageGalleryItem,
   StyledGalleryImage,
 } from './ImageGalleryItem.styled';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
-export const ImageGalleryItem = ({
-  tags,
-  largeImageURL,
-  webformatURL,
-}) => {
+export const ImageGalleryItem = ({ tags, largeImageURL, webformatURL }) => {
   const [showModal, setShowModal] = useState(false);
 
-    const toggleModal = () => {
+  const toggleModal = () => {
     setShowModal(!showModal);
   };
 
   return (
     <>
-    <StyledImageGalleryItem onClick={toggleModal}>
-      <StyledGalleryImage
-        src={webformatURL}
-        alt={tags}
-      />
-    </StyledImageGalleryItem>
-          {showModal && (
-        <Modal largeImageURL={largeImageURL} tags={tags} onClose={toggleModal} />
-
-        
+      <StyledImageGalleryItem onClick={toggleModal}>
+        <StyledGalleryImage src={webformatURL} alt={tags} />
+      </StyledImageGalleryItem>
+      {showModal && (
+        <Modal
+          largeImageURL={largeImageURL}
+          tags={tags}
+          onClose={toggleModal}
+        />
       )}
-      </>
+    </>
   );
 };
 
-
-// ImageGalleryItem.propTypes = {
-//   image: PropTypes.string.isRequired,
-//   tags: PropTypes.string.isRequired,
-//   index: PropTypes.number.isRequired,
-//   onClick: PropTypes.func.isRequired,
-// };
+ImageGalleryItem.propTypes = {
+  onClick: PropTypes.func,
+  onClose: PropTypes.func,
+};
