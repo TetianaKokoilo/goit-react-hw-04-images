@@ -3,7 +3,7 @@ import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Loader } from './Loader/Loader';
 import { Button } from './Button/Button';
-import PixabeyAPI from './images-api';
+import PixabeyAPI from './Servise/images-api';
 
 
 export const App = () => {
